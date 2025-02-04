@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library | SagaForge</title>
+    <style>
+/* width */
+::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 8px #333;
+  background: rgba(0,0,0,0.3);
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  box-shadow: inset 0 0 8px #333;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb; 
+}
+</style>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+      	toolbar {
+      		background: linear-gradient(to bottom, #f3f3f3, #e1e1e1);
+            border-bottom: 1px solid #a1a1a1;
+            box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-shadow: 0 1px 0 #fff;
+      		-webkit-user-select: none;
+      		-ms-user-select: none;
+      		user-select: none;
+      		position: fixed;
+      		width: 100%;
+      		height: 30px;
+      	}
+      	toolbar button {
+      		background: linear-gradient(to bottom, #f3f3f3, #e1e1e1);
+            border: 1px solid #a1a1a1;
+      		border-top: 0px none;
+            border-bottom-left-radius: 5px;
+      		border-bottom-right-radius: 5px;
+            box-shadow: inset 0 1px 0 #fff, 0 1px 3px rgba(0, 0, 0, 0.3);
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 17px;
+            padding: 10px 50px;
+            text-shadow: 0 1px 0 #fff;
+      		-webkit-user-select: none;
+      		-ms-user-select: none;
+      		user-select: none;
+      		font-weight: bold;
+      	}
+      	toolbar button:hover {
+            background: linear-gradient(to bottom, #e1e1e1, #f3f3f3);
+            cursor: pointer;
+        }
+        toolbar button:active {
+            background: linear-gradient(to bottom, #d1d1d1, #e1e1e1);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+      	toolbar li, toolbar div, toolbar center {
+      		display: inline-block;
+      		margin-left: 5px;
+      		margin-right: 5px;
+      	}
+      	#searchtxt {
+            width: 100%;
+            max-width: 280px;
+            padding: 2px;
+            border: 1px solid #A9A9A9;
+            border-radius: 2px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-family: Tahoma, sans-serif;
+            font-size: 14px;
+        }
+        #searchtxt:focus {
+            border-color: #555;
+            box-shadow: 0 0 3px #777;
+            outline: none;
+        }
+      	#main {
+      		overflow-x: hidden;
+      		overflow-y: auto;
+      		margin-top: 30px;
+      		height: calc(100% - 30px);
+      		position: absolute;
+      		z-index: 8;
+      		width: 100%;
+      	}
+      	.window {
+      		max-width: 700px;
+      		width: 63%;
+      		background: linear-gradient(to bottom, #f3f3f3, #e1e1e1);
+            border: 1px solid #a1a1a1;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 0 #fff, 0 1px 10px rgba(0, 0, 0, 0.3);
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding-bottom: 15px;
+            text-shadow: 0 1px 0 #fff;
+      		-webkit-user-select: none;
+      		-ms-user-select: none;
+      		user-select: none;
+      		margin-bottom: 20px;
+      	}
+      	.window hr {
+      		width: 90%;
+      	}
+	#maillink {
+      		color: blue;
+      	}
+      	#maillink:hover {
+      		color: DodgerBlue;
+      	}
+      	#maillink:active {
+      		color: DarkBlue;
+      	}
+      	#logotxt {
+      		text-decoration: none;
+      		color: #333;
+      	}
+      	.window button {
+      		background: linear-gradient(to bottom, #f3f3f3, #e1e1e1);
+            border: 1px solid #a1a1a1;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0, 0, 0, 0.2);
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px 20px;
+            text-shadow: 0 1px 0 #fff;
+      	}
+      	.window button:hover {
+      		background: linear-gradient(to bottom, #e1e1e1, #f3f3f3);
+            cursor: pointer;
+      	}
+      	.window button:active {
+      		background: linear-gradient(to bottom, #d1d1d1, #e1e1e1);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+      	}
+      	.win7-textbox {
+            width: 100%;
+            max-width: 250px;
+            padding: 5px;
+            border: 1px solid #A9A9A9;
+            border-radius: 2px;
+      		transform: translateY(-2px);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        .win7-textbox:focus {
+            border-color: #4D90FE;
+            box-shadow: 0 0 3px rgba(77, 144, 254, 0.5);
+            outline: none;
+        }
+      	.win7-textbtn {
+      		margin-left: 3px;
+      		margin-top: 1px;
+      		height: 28px;
+      		padding: 6px !important;
+      	}
+      	#no-results {
+            color: #ff0000;
+            display: none;
+        }
+    </style>
+<link rel="stylesheet" href="https://sagaforge17.github.io/bubble-layout.css">
+</head>
+<body>
+<div id="gradient-bg"></div>
+		<toolbar>
+          <div style="position:fixed;top:6px;z-index:5;">
+          <li>
+          <h2 style="margin-top:auto;margin-bottom:7px;margin-left:10px;margin-right:5px;transform:translateY(-4px);"><a href="https://sagaforge17.github.io/" id="logotxt" target="_self">SagaForge</a></h2>
+          </li>
+          </div>
+          <center style="position:fixed;width:100%;margin:0;">
+          <li>
+          <button onclick="accountMenu()">Account ▼</button>
+          </li>
+          <li>
+          <button onclick="libraryMenu()" disabled>Library ▼</button>
+          </li>
+          </center>
+          <div style="position:fixed;right:10px;">
+          <li>
+          <p id="NewDetailsTxt" style="transform:scale(1.1)translateY(-4.8px);"></p>
+          </li>
+          </div>
+      </toolbar>
+<div id="main">
+  <br><br><br>
+  <center>
+    <div class="window"><br><br>
+    <h1 style="transform:scale(2.5);">Others</h1><br>
+    </div>
+    <div class="window">
+    <br>
+    <font size="3">This is where you can find all of the 3rd-party websites for SagaForge.</font>
+    </div>
+    <div class="window"><br>
+    <div style="padding-right:10px;padding-left:10px;margin-top:5px;">
+   	<img height="150px" src="https://sagaforge17.github.io/SF-banner-wb.png"></img>
+    <button onclick="webBuilder()" style="margin-top:10px;">Open Website Builder</button>
+	</div>
+    </div>
+  </center>
+</div>
+      <script src="https://sagaforge17.github.io/news.js"></script>
+      <script>
+        const bubbleCount = 130;
+        const bubbles = [];
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 10 + 5}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            bubble.style.width = `${Math.random() * 20 + 20}px`; // Random size between 20px and 40px
+            bubble.style.height = bubble.style.width;
+            document.body.appendChild(bubble);
+            bubbles.push(bubble);
+        }
+    </script>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                document.querySelector('.intro').style.display = 'none';
+            }, 8000); // Match the duration of fadePopIn and fadeOut animations
+        };
+      	
+      	function accountMenu() {
+      		window.open("https://sagaforge17.github.io/account/", "_self");
+      	}
+      
+      	function libraryMenu() {
+      		window.open("https://sagaforge17.github.io/library/", "_self");
+      	}
+    </script>
+    <script>
+function webBuilder() {
+    window.open("https://sagaforge17.github.io/web-builder/", "_self");
+}
+    </script>
+</body>
+</html>
